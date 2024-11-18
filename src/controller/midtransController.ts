@@ -165,8 +165,8 @@ export const handleMidtransNotification = async (req: any, res: any) => {
         break;
     }
 
-    const findID = await Order.findOne({ order_id });
-    console.log(`ini findID`,findID) 
+    const findID = await Order.findOne({ invoice: order_id });
+    console.log(`ini findID`, findID);
     if (findID) {
       const sendBalance = await sendSol({
         recipient: findID.addressWallet,
