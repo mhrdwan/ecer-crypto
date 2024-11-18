@@ -5,10 +5,10 @@ dotenv.config();
 const bot = new Telegraf(process.env.API_TELEGRAM_BOT as string);
 
 export async function sendTelegramMessage({
-  chatId = 5691803139,
-  message = "",
+  chatId ,
+  message ,
 }: {
-  chatId?: number;
+  chatId: number;
   message?: any;
 }) {
   try {

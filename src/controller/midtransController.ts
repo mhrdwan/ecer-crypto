@@ -13,7 +13,7 @@ export const midtransCreate = async ({
   addressWallet,
   chatId,
   token,
-  jumlahToken
+  jumlahToken,
 }: {
   total: number;
   chatId: any;
@@ -24,7 +24,7 @@ export const midtransCreate = async ({
   name: string;
   addressWallet: string;
   token: string;
-  jumlahToken:number
+  jumlahToken: number;
 }) => {
   const invoice = `INV-RID-${Date.now()}`;
   const newOrder = new Order({
@@ -36,7 +36,7 @@ export const midtransCreate = async ({
     status: "pending",
     invoice: invoice,
     addressWallet: addressWallet,
-    jumlahToken
+    jumlahToken,
   });
   await newOrder.save();
   console.log(`ini total`, total);
@@ -69,6 +69,7 @@ export const midtransCreate = async ({
 
     const paymentUrl = transaction || "URL tidak tersedia";
     await sendTelegramMessage({
+      chatId,
       message: `
 📢 Transaksi Berhasil Dibuat 📢
 
@@ -163,40 +164,6 @@ export const handleMidtransNotification = async (req: any, res: any) => {
         console.log(`Unhandled transaction status: ${transaction_status}`);
         break;
     }
-    if (transaction_status == "settlement") {
-      await sendTelegramMessage({
-        message: `
-  📢 Alert Transaksi Toko Ecer Ridwan 📢
-  
-  🛒 Order ID: ${order_id}
-  📌 Status: ${transaction_status.toUpperCase()}
-  💳 Pembayaran: ${payment_type}
-  💵 Jumlah: Rp ${Number(gross_amount).toLocaleString("id-ID")}
-  ⏰ Waktu Transaksi: ${new Date(transaction_time).toLocaleString()}
-  🆔 ID Transaksi: ${transaction_id}
-  
-  📄 Detail Tambahan:
-  🧾 Merchant ID: ${merchant_id}
-  🏦 Issuer: ${issuer || "N/A"}
-  🔍 Fraud Status: ${fraud_status || "N/A"}
-  ✅ Waktu Penyelesaian: ${
-    settlement_time ? new Date(settlement_time).toLocaleString() : "N/A"
-  }
-  🏢 Aquirer: ${acquirer || "N/A"}
-  ⏳ Expiry Time: ${
-    expiry_time ? new Date(expiry_time).toLocaleString() : "N/A"
-  }
-  
-  📝 Catatan: ${
-    transaction_status === "settlement"
-      ? "Transaksi berhasil diselesaikan."
-      : transaction_status === "pending"
-      ? "Transaksi sedang diproses."
-      : `Transaksi gagal dengan status ${transaction_status}.`
-  }
-        `,
-      });
-    }
 
     const findID = await Order.findOne({ order_id });
     if (findID) {
@@ -205,7 +172,42 @@ export const handleMidtransNotification = async (req: any, res: any) => {
         amountSol: 1,
       });
       sendTelegramMessage({ chatId: findID.chatId, message: sendBalance });
-      findID.updateOne({ status: "sukses" });
+      Order.updateOne({ status: "sukses" });
+      if (transaction_status == "settlement") {
+        await sendTelegramMessage({
+          chatId: findID.chatId,
+          message: `
+    📢 Alert Transaksi Toko Ecer Ridwan 📢
+    
+    🛒 Order ID: ${order_id}
+    📌 Status: ${transaction_status.toUpperCase()}
+    💳 Pembayaran: ${payment_type}
+    💵 Jumlah: Rp ${Number(gross_amount).toLocaleString("id-ID")}
+    ⏰ Waktu Transaksi: ${new Date(transaction_time).toLocaleString()}
+    🆔 ID Transaksi: ${transaction_id}
+    
+    📄 Detail Tambahan:
+    🧾 Merchant ID: ${merchant_id}
+    🏦 Issuer: ${issuer || "N/A"}
+    🔍 Fraud Status: ${fraud_status || "N/A"}
+    ✅ Waktu Penyelesaian: ${
+      settlement_time ? new Date(settlement_time).toLocaleString() : "N/A"
+    }
+    🏢 Aquirer: ${acquirer || "N/A"}
+    ⏳ Expiry Time: ${
+      expiry_time ? new Date(expiry_time).toLocaleString() : "N/A"
+    }
+    
+    📝 Catatan: ${
+      transaction_status === "settlement"
+        ? "Transaksi berhasil diselesaikan."
+        : transaction_status === "pending"
+        ? "Transaksi sedang diproses."
+        : `Transaksi gagal dengan status ${transaction_status}.`
+    }
+          `,
+        });
+      }
     }
 
     res.status(200).json({
