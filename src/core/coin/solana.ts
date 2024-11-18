@@ -1,0 +1,65 @@
+import {
+  Connection,
+  Keypair,
+  clusterApiUrl,
+  PublicKey,
+  Transaction,
+  SystemProgram,
+} from "@solana/web3.js";
+import bs58 from "bs58";
+import dotenv from "dotenv";
+import { sendTelegramMessage } from "../telegram/telegramFunction";
+import Order from "../../models/Order";
+dotenv.config();
+const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+const privateKeyBase58 = process.env.PRIVKEY_SOLANA as string;
+const privateKey = bs58.decode(privateKeyBase58);
+const keypair = Keypair.fromSecretKey(privateKey);
+const publicKey = keypair.publicKey;
+
+export async function checkSolBalance() {
+  try {
+    const balanceLamports = await connection.getBalance(publicKey);
+    const balanceSol = balanceLamports / 1e9;
+    console.log(`Saldo SOL: ${balanceSol} SOL`);
+    return balanceSol;
+  } catch (error: any) {
+    console.error("Error checking balance:", error);
+    throw error;
+  }
+}
+
+export async function sendSol({
+  amountSol,
+  recipient,
+}: {
+  amountSol: number;
+  recipient: string;
+}) {
+  const recipientAddress = new PublicKey(recipient);
+
+  const amountLamports = amountSol * 1e9;
+
+  const transaction = new Transaction().add(
+    SystemProgram.transfer({
+      fromPubkey: publicKey,
+      toPubkey: recipientAddress,
+      lamports: amountLamports,
+    })
+  );
+
+  try {
+    const signature = await connection.sendTransaction(transaction, [keypair]);
+
+    const confirmation = await connection.confirmTransaction(
+      signature,
+      "confirmed"
+    );
+    console.log("Transaction Confirmed:", confirmation);
+    // console.log(`TX https://solscan.io/tx/${signature}?cluster=devnet`);
+    return { signature, confirmation };
+  } catch (error: any) {
+    console.error("Error during transaction:", error);
+    throw error;
+  }
+}
