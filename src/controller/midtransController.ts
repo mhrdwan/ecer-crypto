@@ -172,8 +172,12 @@ export const handleMidtransNotification = async (req: any, res: any) => {
         recipient: findID.addressWallet,
         amountSol: 1,
       });
-      sendTelegramMessage({ chatId: findID.chatId, message: sendBalance.signature });
-      await Order.findByIdAndUpdate(findID.invoice, { status: "sukses" });
+      sendTelegramMessage({
+        chatId: findID.chatId,
+        message: `TX https://solscan.io/tx/${sendBalance.signature}?cluster=devnet`,
+      });
+      findID.status = "sukses";
+      await findID.save();
       if (transaction_status == "settlement") {
         await sendTelegramMessage({
           chatId: findID.chatId,
