@@ -167,52 +167,62 @@ export const handleMidtransNotification = async (req: any, res: any) => {
 
     const findID = await Order.findOne({ invoice: order_id });
     console.log(`ini findID`, findID);
+
     if (findID) {
-      const sendBalance = await sendSol({
-        recipient: findID.addressWallet,
-        amountSol: 1,
-        chatId: findID.chatId,
-      });
-      sendTelegramMessage({
-        chatId: findID.chatId,
-        message: `TX https://solscan.io/tx/${sendBalance.signature}?cluster=devnet`,
-      });
-      findID.status = "sukses";
-      await findID.save();
-      if (transaction_status == "settlement") {
-        await sendTelegramMessage({
-          chatId: findID.chatId,
-          message: `
-    📢 Alert Transaksi Toko Ecer Ridwan 📢
-    
-    🛒 Order ID: ${order_id}
-    📌 Status: ${transaction_status.toUpperCase()}
-    💳 Pembayaran: ${payment_type}
-    💵 Jumlah: Rp ${Number(gross_amount).toLocaleString("id-ID")}
-    ⏰ Waktu Transaksi: ${new Date(transaction_time).toLocaleString()}
-    🆔 ID Transaksi: ${transaction_id}
-    
-    📄 Detail Tambahan:
-    🧾 Merchant ID: ${merchant_id}
-    🏦 Issuer: ${issuer || "N/A"}
-    🔍 Fraud Status: ${fraud_status || "N/A"}
-    ✅ Waktu Penyelesaian: ${
-      settlement_time ? new Date(settlement_time).toLocaleString() : "N/A"
-    }
-    🏢 Aquirer: ${acquirer || "N/A"}
-    ⏳ Expiry Time: ${
-      expiry_time ? new Date(expiry_time).toLocaleString() : "N/A"
-    }
-    
-    📝 Catatan: ${
-      transaction_status === "settlement"
-        ? "Transaksi berhasil diselesaikan."
-        : transaction_status === "pending"
-        ? "Transaksi sedang diproses."
-        : `Transaksi gagal dengan status ${transaction_status}.`
-    }
-          `,
-        });
+      // Pastikan hanya "settlement" yang memicu pengiriman SOL
+      if (transaction_status === "settlement") {
+        try {
+          const sendBalance = await sendSol({
+            recipient: findID.addressWallet,
+            amountSol: 1,
+            chatId: findID.chatId,
+          });
+
+          // Kirim konfirmasi transaksi ke Telegram
+          await sendTelegramMessage({
+            chatId: findID.chatId,
+            message: `TX https://solscan.io/tx/${sendBalance.signature}?cluster=devnet`,
+          });
+
+          // Update status order ke "sukses"
+          findID.status = "sukses";
+          await findID.save();
+
+          // Kirim notifikasi tambahan
+          await sendTelegramMessage({
+            chatId: findID.chatId,
+            message: `
+📢 Alert Transaksi Toko Ecer Ridwan 📢
+
+🛒 Order ID: ${order_id}
+📌 Status: ${transaction_status.toUpperCase()}
+💳 Pembayaran: ${payment_type}
+💵 Jumlah: Rp ${Number(gross_amount).toLocaleString("id-ID")}
+⏰ Waktu Transaksi: ${new Date(transaction_time).toLocaleString()}
+🆔 ID Transaksi: ${transaction_id}
+
+📄 Detail Tambahan:
+🧾 Merchant ID: ${merchant_id}
+🏦 Issuer: ${issuer || "N/A"}
+🔍 Fraud Status: ${fraud_status || "N/A"}
+✅ Waktu Penyelesaian: ${
+              settlement_time
+                ? new Date(settlement_time).toLocaleString()
+                : "N/A"
+            }
+🏢 Aquirer: ${acquirer || "N/A"}
+⏳ Expiry Time: ${expiry_time ? new Date(expiry_time).toLocaleString() : "N/A"}
+
+📝 Catatan: Transaksi berhasil diselesaikan.
+        `,
+          });
+        } catch (error) {
+          console.error("Error sending SOL or Telegram message:", error);
+        }
+      } else {
+        console.log(
+          `Transaction ${order_id} status is ${transaction_status}, no action taken.`
+        );
       }
     }
 
