@@ -32,9 +32,11 @@ export async function checkSolBalance() {
 export async function sendSol({
   amountSol,
   recipient,
+  chatId,
 }: {
   amountSol: number;
   recipient: string;
+  chatId: number;
 }) {
   const recipientAddress = new PublicKey(recipient);
 
@@ -49,17 +51,37 @@ export async function sendSol({
   );
 
   try {
+    // Kirim transaksi
     const signature = await connection.sendTransaction(transaction, [keypair]);
 
+    // Konfirmasi transaksi
     const confirmation = await connection.confirmTransaction(
       signature,
       "confirmed"
     );
+
     console.log("Transaction Confirmed:", confirmation);
-    // console.log(`TX https://solscan.io/tx/${signature}?cluster=devnet`);
+
+    // Periksa apakah ada error di dalam konfirmasi
+    if (confirmation.value.err) {
+      console.error("Transaction failed with error:", confirmation.value.err);
+      throw new Error(
+        `Transaction failed: ${JSON.stringify(confirmation.value.err)}`
+      );
+    }
+
+    // Berikan tanda tangan transaksi sebagai hasil sukses
     return { signature, confirmation };
   } catch (error: any) {
     console.error("Error during transaction:", error);
+
+    // Kirim pesan ke Telegram jika transaksi gagal (opsional)
+    await sendTelegramMessage({
+      chatId: chatId, // Ganti dengan chatId yang relevan
+      message: `🚨 Transaksi gagal: ${error.message}`,
+    });
+
+    // Berhentikan proses berikutnya dengan membuang error
     throw error;
   }
 }
