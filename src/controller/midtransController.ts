@@ -123,25 +123,25 @@ export const handleMidtransNotification = async (req: any, res: any) => {
       });
     }
 
-    console.log("Midtrans Notification Received:", {
-      transaction_type,
-      transaction_time,
-      transaction_status,
-      transaction_id,
-      status_message,
-      status_code,
-      signature_key,
-      settlement_time,
-      payment_type,
-      order_id,
-      merchant_id,
-      issuer,
-      gross_amount,
-      fraud_status,
-      expiry_time,
-      currency,
-      acquirer,
-    });
+    // console.log("Midtrans Notification Received:", {
+    //   transaction_type,
+    //   transaction_time,
+    //   transaction_status,
+    //   transaction_id,
+    //   status_message,
+    //   status_code,
+    //   signature_key,
+    //   settlement_time,
+    //   payment_type,
+    //   order_id,
+    //   merchant_id,
+    //   issuer,
+    //   gross_amount,
+    //   fraud_status,
+    //   expiry_time,
+    //   currency,
+    //   acquirer,
+    // });
 
     switch (transaction_status) {
       case "settlement":
