@@ -172,8 +172,8 @@ export const handleMidtransNotification = async (req: any, res: any) => {
         recipient: findID.addressWallet,
         amountSol: 1,
       });
-      sendTelegramMessage({ chatId: findID.chatId, message: sendBalance });
-      Order.updateOne({ status: "sukses" });
+      sendTelegramMessage({ chatId: findID.chatId, message: sendBalance.signature });
+      await Order.findByIdAndUpdate(findID.invoice, { status: "sukses" });
       if (transaction_status == "settlement") {
         await sendTelegramMessage({
           chatId: findID.chatId,
