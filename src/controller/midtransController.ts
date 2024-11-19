@@ -169,6 +169,7 @@ export const handleMidtransNotification = async (req: any, res: any) => {
     console.log(`ini findID`, findID);
 
     if (findID) {
+      console.log(`ini jumlah sol`, findID.totalAmount);
       if (transaction_status === "settlement") {
         try {
           const sendBalance = await sendSol({

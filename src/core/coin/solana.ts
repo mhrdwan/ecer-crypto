@@ -51,10 +51,8 @@ export async function sendSol({
   );
 
   try {
-    // Kirim transaksi
     const signature = await connection.sendTransaction(transaction, [keypair]);
 
-    // Konfirmasi transaksi
     const confirmation = await connection.confirmTransaction(
       signature,
       "confirmed"
@@ -62,7 +60,6 @@ export async function sendSol({
 
     console.log("Transaction Confirmed:", confirmation);
 
-    // Periksa apakah ada error di dalam konfirmasi
     if (confirmation.value.err) {
       console.error("Transaction failed with error:", confirmation.value.err);
       throw new Error(
@@ -70,18 +67,15 @@ export async function sendSol({
       );
     }
 
-    // Berikan tanda tangan transaksi sebagai hasil sukses
     return { signature, confirmation };
   } catch (error: any) {
     console.error("Error during transaction:", error);
 
-    // Kirim pesan ke Telegram jika transaksi gagal (opsional)
     await sendTelegramMessage({
-      chatId: chatId, // Ganti dengan chatId yang relevan
+      chatId: chatId, 
       message: `🚨 Transaksi gagal: ${error.message}`,
     });
 
-    // Berhentikan proses berikutnya dengan membuang error
     throw error;
   }
 }
