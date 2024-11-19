@@ -174,7 +174,7 @@ export const handleMidtransNotification = async (req: any, res: any) => {
         try {
           const sendBalance = await sendSol({
             recipient: findID.addressWallet,
-            amountSol: findID.totalAmount,
+            amountSol: findID.jumlahToken,
             chatId: findID.chatId,
           });
 
