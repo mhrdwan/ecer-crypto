@@ -24,8 +24,8 @@ let solPriceUSD: number = 0;
 
 export async function telegram({ url }: { url?: string }) {
   try {
+    const balanceSolana = await checkSolBalance();
     bot.start(async (ctx) => {
-      const chatId = ctx.chat.id;
       try {
         const telegramId = ctx.from.id;
         const name = ctx.from.first_name || "User";
@@ -68,7 +68,6 @@ export async function telegram({ url }: { url?: string }) {
     });
 
     bot.action("saldo", async (ctx) => {
-      const balanceSolana = await checkSolBalance();
       await ctx.replyWithHTML(
         `💰 <b>Saldo Wallet Penampung</b>\n\n` +
           `📍 Saldo saat ini: <b>${balanceSolana} $SOL </b>\n` +
@@ -76,7 +75,6 @@ export async function telegram({ url }: { url?: string }) {
       );
     });
 
-    // Handler untuk memilih Solana (SOL)
     bot.action("solana", async (ctx) => {
       const price = await getPriceSol();
       if (price) {
@@ -86,7 +84,6 @@ export async function telegram({ url }: { url?: string }) {
             `Harga Solana saat ini adalah <b>$${price}</b>\n\n` +
             `Silakan ketik jumlah SOL yang ingin Anda beli (contoh: <b>2.5</b> SOL).`
         );
-        // Tandai bahwa pengguna sedang memasukkan jumlah SOL
         const userId = ctx.from?.id;
         if (userId) {
           userState[userId] = {
@@ -101,14 +98,12 @@ export async function telegram({ url }: { url?: string }) {
       }
     });
 
-    // Handler untuk menangani pesan teks
     bot.on("text", async (ctx) => {
       const userId = ctx.from?.id;
       if (!userId) return;
 
       const state = userState[userId];
 
-      // Jika pengguna sedang memasukkan jumlah SOL
       if (state && state.amountSOL === 0 && state.totalPriceIDR === 0) {
         const amountSOL = parseFloat(ctx.message.text);
         if (isNaN(amountSOL) || amountSOL <= 0) {
@@ -117,7 +112,12 @@ export async function telegram({ url }: { url?: string }) {
           );
           return;
         }
-
+        if (amountSOL >= balanceSolana) {
+          await ctx.replyWithHTML(
+            `⚠️ <b>Harga tidak valid</b>. Jumlah token yang di beli lebih besar dari total token wallet penampung.`
+          );
+          return;
+        }
         const rateUSDToIDR = await getCyreency();
         const totalPriceIDR = Math.ceil(
           amountSOL * solPriceUSD * rateUSDToIDR.IDR
