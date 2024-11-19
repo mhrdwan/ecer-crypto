@@ -48,7 +48,7 @@ export async function telegram({ url }: { url?: string }) {
             `🔹 <b>Solana (SOL)</b> \n- Stok: <b>${balanceSolana} $SOL</b>\n\n` +
             `🔹 <b>Ethereum (ETH)</b> \n- Stock : <b>Belum Tersedia</b>\n\n` +
             `🔹 <b>USDT (Tether)</b> \n- Stock : <b>Belum Tersedia</b>\n\n` +
-            `🔹 <b>BNB (Binance Coin)</b> \n- Stock : <b>Belum Tersedia</b>\n` +
+            `🔹 <b>BNB (Binance Coin)</b> \n- Stock : <b>Belum Tersedia</b>\n\n` +
             `💵 <b>Pilihan Metode Pembayaran:</b>\n` +
             `✔️ QRIS\n` +
             `✔️ Transfer Bank\n` +
