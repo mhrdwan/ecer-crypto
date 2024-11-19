@@ -169,21 +169,22 @@ export const handleMidtransNotification = async (req: any, res: any) => {
     console.log(`ini findID`, findID);
 
     if (findID) {
-      // Pastikan hanya "settlement" yang memicu pengiriman SOL
       if (transaction_status === "settlement") {
         try {
           const sendBalance = await sendSol({
             recipient: findID.addressWallet,
-            amountSol: 1,
+            amountSol: findID.totalAmount,
             chatId: findID.chatId,
           });
 
-          // Kirim konfirmasi transaksi ke Telegram
           await sendTelegramMessage({
             chatId: findID.chatId,
-            message: `TX https://solscan.io/tx/${sendBalance.signature}?cluster=devnet`,
+            message: `
+          🚀 **Transaksi Berhasil!** 🚀
+          
+          🔗 Lihat detail transaksi Anda: https://solscan.io/tx/${sendBalance.signature}?cluster=devnet
+            `,
           });
-
           // Update status order ke "sukses"
           findID.status = "sukses";
           await findID.save();
