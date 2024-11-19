@@ -45,9 +45,9 @@ export async function telegram({ url }: { url?: string }) {
         await ctx.replyWithHTML(
           `🌟 <b>Selamat Datang di Toko Crypto Ecer Ridwan</b> 🌟\n\n` +
             `Kami hadir untuk mempermudah Anda dalam melakukan top-up <b>crypto eceran</b> dengan berbagai pilihan koin populer:\n\n` +
-            `🔹 <b>Solana (SOL)</b> \n- Stok: <b>${balanceSolana} $SOL</b>\n` +
-            `🔹 <b>Ethereum (ETH)</b> \n- Stock : <b>Belum Tersedia</b>\n` +
-            `🔹 <b>USDT (Tether)</b> \n- Stock : <b>Belum Tersedia</b>\n` +
+            `🔹 <b>Solana (SOL)</b> \n- Stok: <b>${balanceSolana} $SOL</b>\n\n` +
+            `🔹 <b>Ethereum (ETH)</b> \n- Stock : <b>Belum Tersedia</b>\n\n` +
+            `🔹 <b>USDT (Tether)</b> \n- Stock : <b>Belum Tersedia</b>\n\n` +
             `🔹 <b>BNB (Binance Coin)</b> \n- Stock : <b>Belum Tersedia</b>\n` +
             `💵 <b>Pilihan Metode Pembayaran:</b>\n` +
             `✔️ QRIS\n` +
