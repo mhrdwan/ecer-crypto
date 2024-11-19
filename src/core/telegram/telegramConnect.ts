@@ -43,30 +43,32 @@ export async function telegram({ url }: { url?: string }) {
         }
 
         await ctx.replyWithHTML(
-          `🎉 <b>Selamat datang di Toko Ecer Ridwan</b>! 🎉\n\n` +
-            `Kami menyediakan layanan top-up <b>crypto eceran</b> dengan berbagai pilihan koin populer:\n` +
-            `✅ <b>Solana (SOL)</b>\n` +
-            `✅ <b>Ethereum (ETH)</b>\n` +
-            `✅ <b>USDT (Tether)</b>\n` +
-            `✅ <b>BNB (Binance Coin)</b>\n\n` +
-            `💳 <b>Metode Pembayaran:</b>\n` +
-            `- QRIS\n` +
-            `- Transfer Bank\n` +
-            `- Opsi lainnya\n\n` +
-            `📩 <b>Pilih koin yang ingin Anda top up</b> dari menu di bawah ini:\n\n` +
-            `✨ Terima kasih atas kepercayaan Anda! ✨`,
-          // Markup.inlineKeyboard([
-          //   [Markup.button.callback("Cek Saldo Wallet Penampung", "saldo")],
-          //   [Markup.button.callback("Solana (SOL)", "solana")],
-          //   [Markup.button.callback("Hub Admin", "dev")],
-          // ])
+          `🌟 <b>Selamat Datang di Toko Crypto Ecer Ridwan</b> 🌟\n\n` +
+            `Kami hadir untuk mempermudah Anda dalam melakukan top-up <b>crypto eceran</b> dengan berbagai pilihan koin populer:\n\n` +
+            `🔹 <b>Solana (SOL)</b> — Stok: <b>${balanceSolana} $SOL</b>\n` +
+            `🔹 <b>Ethereum (ETH)</b> — Tersedia!\n` +
+            `🔹 <b>USDT (Tether)</b> — Tersedia!\n` +
+            `🔹 <b>BNB (Binance Coin)</b> — Tersedia!\n\n` +
+            `💵 <b>Pilihan Metode Pembayaran:</b>\n` +
+            `✔️ QRIS\n` +
+            `✔️ Transfer Bank\n` +
+            `✔️ Opsi lain (hubungi admin)\n\n` +
+            `🛒 <b>Silakan beli koin pilihan Anda dari menu di bawah ini:</b>\n\n` +
+            `✨ <i>Terima kasih atas kepercayaan Anda, semoga transaksi Anda berjalan lancar!</i> ✨`,
           Markup.inlineKeyboard([
             [
-              Markup.button.callback("Cek Saldo Wallet Penampung", "saldo"),
-              Markup.button.callback("Solana (SOL)", "solana"),
+              Markup.button.callback("💰 Beli Solana (SOL)", "solana"),
+              Markup.button.callback("📞 Hubungi Admin", "dev"),
             ],
-            [Markup.button.callback("Hub Admin", "dev")],
           ])
+
+          // Markup.inlineKeyboard([
+          //   [
+          //     Markup.button.callback("Cek Saldo Wallet Penampung", "saldo"),
+          //     Markup.button.callback("Solana (SOL)", "solana"),
+          //   ],
+          //   [Markup.button.callback("Hub Admin", "dev")],
+          // ])
         );
       } catch (error) {
         console.error("Error in bot.start:", error);
