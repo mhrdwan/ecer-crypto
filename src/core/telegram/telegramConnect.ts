@@ -10,7 +10,6 @@ dotenv.config();
 
 const bot = new Telegraf(process.env.API_TELEGRAM_BOT as string);
 
-// Menyimpan state pengguna dengan detail transaksi
 let userState: Record<
   number,
   {
