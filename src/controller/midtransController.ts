@@ -181,9 +181,7 @@ export const handleMidtransNotification = async (req: any, res: any) => {
           await sendTelegramMessage({
             chatId: findID.chatId,
             message: `
-          🚀 **Transaksi Berhasil!** 🚀
-          
-          🔗 Lihat detail transaksi Anda: https://solscan.io/tx/${sendBalance.signature}?cluster=devnet
+          🚀 Transaksi Berhasil! 🚀\n🔗 Lihat detail transaksi Anda: \nhttps://solscan.io/tx/${sendBalance.signature}?cluster=devnet
             `,
           });
           // Update status order ke "sukses"
@@ -197,23 +195,11 @@ export const handleMidtransNotification = async (req: any, res: any) => {
 📢 Alert Transaksi Toko Ecer Ridwan 📢
 
 🛒 Order ID: ${order_id}
-📌 Status: ${transaction_status.toUpperCase()}
+📌 Status: ${transaction_status.toUpperCase()} ✅
 💳 Pembayaran: ${payment_type}
 💵 Jumlah: Rp ${Number(gross_amount).toLocaleString("id-ID")}
 ⏰ Waktu Transaksi: ${new Date(transaction_time).toLocaleString()}
-🆔 ID Transaksi: ${transaction_id}
 
-📄 Detail Tambahan:
-🧾 Merchant ID: ${merchant_id}
-🏦 Issuer: ${issuer || "N/A"}
-🔍 Fraud Status: ${fraud_status || "N/A"}
-✅ Waktu Penyelesaian: ${
-              settlement_time
-                ? new Date(settlement_time).toLocaleString()
-                : "N/A"
-            }
-🏢 Aquirer: ${acquirer || "N/A"}
-⏳ Expiry Time: ${expiry_time ? new Date(expiry_time).toLocaleString() : "N/A"}
 
 📝 Catatan: Transaksi berhasil diselesaikan.
         `,
