@@ -189,7 +189,8 @@ export const handleMidtransNotification = async (req: any, res: any) => {
 🛒 Order ID: ${order_id}
 📌 Status: ${transaction_status.toUpperCase()} ✅
 💳 Pembayaran: ${payment_type}
-💵 Jumlah: Rp ${Number(gross_amount).toLocaleString("id-ID")}
+💵 Jumlah Rupiah: Rp ${Number(gross_amount).toLocaleString("id-ID")}
+💵 Jumlah Token: ${findID.jumlahToken} ${findID.token}
 ⏰ Waktu Transaksi: ${new Date(transaction_time).toLocaleString()}
 
 Lihat detail transaksi Anda: \nhttps://solscan.io/tx/${
