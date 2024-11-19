@@ -55,9 +55,16 @@ export async function telegram({ url }: { url?: string }) {
             `- Opsi lainnya\n\n` +
             `📩 <b>Pilih koin yang ingin Anda top up</b> dari menu di bawah ini:\n\n` +
             `✨ Terima kasih atas kepercayaan Anda! ✨`,
+          // Markup.inlineKeyboard([
+          //   [Markup.button.callback("Cek Saldo Wallet Penampung", "saldo")],
+          //   [Markup.button.callback("Solana (SOL)", "solana")],
+          //   [Markup.button.callback("Hub Admin", "dev")],
+          // ])
           Markup.inlineKeyboard([
-            [Markup.button.callback("Cek Saldo Wallet Penampung", "saldo")],
-            [Markup.button.callback("Solana (SOL)", "solana")],
+            [
+              Markup.button.callback("Cek Saldo Wallet Penampung", "saldo"),
+              Markup.button.callback("Solana (SOL)", "solana"),
+            ],
             [Markup.button.callback("Hub Admin", "dev")],
           ])
         );
@@ -219,8 +226,8 @@ export async function telegram({ url }: { url?: string }) {
           email: `ridwan@gmail.com`,
           total: totalPriceIDR,
           addressWallet: walletAddress,
-          token : "solana",
-          jumlahToken : amountSOL
+          token: "solana",
+          jumlahToken: amountSOL,
         });
 
         // await ctx.replyWithHTML(
