@@ -4,7 +4,7 @@ import { getPriceSol } from "../api/solanaPrice";
 import { getCyreency } from "../api/currency";
 import { midtransCreate } from "../../controller/midtransController";
 import { checkSolBalance } from "../coin/solana";
-import Users from "../../models/user";
+import Users from "../../models/User";
 
 dotenv.config();
 

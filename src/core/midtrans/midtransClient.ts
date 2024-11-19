@@ -2,7 +2,7 @@ import { MidtransClient } from 'midtrans-node-client';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const isProduction = false
+const isProduction = true
 const serverKey = process.env.MIDTRANS_SERVER_KEY || '';
 const clientKey = process.env.MIDTRANS_CLIENT_KEY || '';
 
