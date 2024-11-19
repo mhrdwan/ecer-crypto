@@ -11,7 +11,7 @@ import dotenv from "dotenv";
 import { sendTelegramMessage } from "../telegram/telegramFunction";
 import Order from "../../models/Order";
 dotenv.config();
-const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+const connection = new Connection(clusterApiUrl("mainnet-beta"), "confirmed");
 const privateKeyBase58 = process.env.PRIVKEY_SOLANA as string;
 const privateKey = bs58.decode(privateKeyBase58);
 const keypair = Keypair.fromSecretKey(privateKey);
