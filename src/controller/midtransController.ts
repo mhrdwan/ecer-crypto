@@ -39,7 +39,7 @@ export const midtransCreate = async ({
   });
   await newOrder.save();
   console.log(`ini total`, total);
-  const PPN = Math.round(total * 0.007);
+  const PPN = (total * 0.007);
   const transactionDetails = {
     order_id: invoice,
     gross_amount: PPN,
