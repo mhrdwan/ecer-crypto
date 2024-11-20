@@ -195,8 +195,8 @@ export async function telegram({ url }: { url?: string }) {
       }
 
       await ctx.replyWithHTML(
-        `🔐 <b>Masukkan alamat wallet Solana Anda</b> untuk menyelesaikan transaksi.\n\n` +
-          `Contoh: <code>SXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</code>`
+        `🔐 <b>Masukkan alamat wallet Solana Anda</b>\n\n` +
+          `Contoh: <code>Dg87PANMcdzruvd1rqiYL1oaL4ZrpiHoLNNSwfcNWNPC</code>`
       );
     });
 
