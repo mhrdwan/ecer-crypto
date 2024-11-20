@@ -162,8 +162,7 @@ export const handleMidtransNotification = async (req: any, res: any) => {
             findID: findID
           });
 
-          findID.status = "sukses";
-          await findID.save();
+          
 
           await sendTelegramMessage({
             chatId: findID.chatId,

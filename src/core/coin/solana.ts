@@ -33,12 +33,12 @@ export async function sendSol({
   amountSol,
   recipient,
   chatId,
-  findID
+  findID,
 }: {
   amountSol: number;
   recipient: string;
   chatId: number;
-  findID:any
+  findID: any;
 }) {
   const recipientAddress = new PublicKey(recipient);
 
@@ -68,7 +68,8 @@ export async function sendSol({
         `Transaction failed: ${JSON.stringify(confirmation.value.err)}`
       );
     }
-
+    findID.status = "sukses";
+    await findID.save();
     return { signature, confirmation };
   } catch (error: any) {
     console.error("Error during transaction:", error);
@@ -92,8 +93,8 @@ export async function sendSol({
         `Kami siap membantu Anda!`,
       parseMode: "HTML",
     });
-    findID.status = "refund"
-    findID.save()
+    findID.status = "refund";
+    findID.save();
     throw error;
   }
 }
