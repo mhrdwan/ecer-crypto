@@ -63,7 +63,7 @@ export async function telegram({ url }: { url?: string }) {
             `- <b>BNB $${priceBNB} / $BNB</b> \n- Stock : <b>${balanceBnb}\n- IDR: Rp${totalIDRBNB.toLocaleString(
               "id-ID"
             )}</b>\n\n` +
-            `- <b>Polygon $${priceMATIC} / $MATIC</b> \n- Stock : <b>${balanceMatic}\n- IDR: Rp${totalIDRMATIC.toLocaleString(
+            `- <b>Polygon $${priceMATIC} / $MATIC</b> \n- Stock : <b>${balanceMatic.toFixed(3)}\n- IDR: Rp${totalIDRMATIC.toLocaleString(
               "id-ID"
             )}</b>\n\n` +
             `💵 <b>Pilihan Metode Pembayaran:</b>\n` +
