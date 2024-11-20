@@ -33,10 +33,12 @@ export async function sendSol({
   amountSol,
   recipient,
   chatId,
+  findID
 }: {
   amountSol: number;
   recipient: string;
   chatId: number;
+  findID:any
 }) {
   const recipientAddress = new PublicKey(recipient);
 
@@ -90,7 +92,8 @@ export async function sendSol({
         `Kami siap membantu Anda!`,
       parseMode: "HTML",
     });
-
+    findID.status = "refund"
+    findID.save()
     throw error;
   }
 }

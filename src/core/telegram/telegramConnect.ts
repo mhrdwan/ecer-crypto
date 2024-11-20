@@ -235,16 +235,6 @@ export async function telegram({ url }: { url?: string }) {
           jumlahToken: amountSOL,
         });
 
-        // await ctx.replyWithHTML(
-        //   `🎉 <b>Transaksi berhasil!</b>\n\n` +
-        //     `Anda telah membeli <b>${amountSOL} SOL</b>.\n` +
-        //     `Total pembayaran: <b>Rp ${totalPriceIDR.toLocaleString(
-        //       "id-ID"
-        //     )}</b>\n` +
-        //     `Alamat Wallet: <b>${walletAddress}</b>\n\n` +
-        //     `Terima kasih telah menggunakan layanan kami!`
-        // );
-
         userState[userId].walletAddress = walletAddress;
 
         delete userState[userId].pendingWalletAddress;
