@@ -72,8 +72,23 @@ export async function sendSol({
     console.error("Error during transaction:", error);
 
     await sendTelegramMessage({
-      chatId: chatId, 
+      chatId: chatId,
       message: `🚨 Transaksi gagal: ${error.message}`,
+    });
+    await sendTelegramMessage({
+      chatId: chatId,
+      message:
+        `🚨 📞 <b>Hubungi Admin Untuk Meminta Refund Manual</b>\n\n` +
+        `Harap sertakan informasi berikut dalam format berikut:\n\n` +
+        `<b>Format Refund:</b>\n` +
+        `Order ID: \n` +
+        `Total Token:\n` +
+        `Jenis Token:\n` +
+        `Total Pembayaran: \n\n` +
+        `Untuk informasi lebih lanjut, silakan hubungi admin:\n` +
+        `- 📱 <b>Telegram:</b> @ridwantech\n\n` +
+        `Kami siap membantu Anda!`,
+      parseMode: "HTML",
     });
 
     throw error;
