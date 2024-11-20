@@ -1,11 +1,13 @@
 import { Telegraf, Markup } from "telegraf";
 import dotenv from "dotenv";
-import { getPriceSol } from "../api/solanaPrice";
+import { getPriceBNB, getPriceMATIC, getPriceSol } from "../api/coinPrice";
 import { getCyreency } from "../api/currency";
 import { midtransCreate } from "../../controller/midtransController";
 import { checkSolBalance } from "../coin/solana";
 import Users from "../../models/User";
 import { PPN } from "../../const/constants";
+import { checkPolygonBalance } from "../coin/polygon";
+import { checkBnbBalance } from "../coin/bnb";
 
 dotenv.config();
 
@@ -24,9 +26,18 @@ let userState: Record<
 let solPriceUSD: number = 0;
 
 export async function telegram({ url }: { url?: string }) {
+  const rateUSDToIDR = await getCyreency();
   try {
     bot.start(async (ctx) => {
       const balanceSolana = await checkSolBalance();
+      const balanceMatic = Number(await checkPolygonBalance());
+      const balanceBnb = Number(await checkBnbBalance());
+      const priceSol = Number(await getPriceSol());
+      const priceBNB = Number(await getPriceBNB());
+      const priceMATIC = Number(await getPriceMATIC());
+      const totalIDRSOL = priceSol * balanceSolana * rateUSDToIDR.IDR;
+      const totalIDRBNB = priceBNB * balanceBnb * rateUSDToIDR.IDR;
+      const totalIDRMATIC = priceMATIC * balanceMatic * rateUSDToIDR.IDR;
       try {
         const telegramId = ctx.from.id;
         const name = ctx.from.first_name || "User";
@@ -44,12 +55,17 @@ export async function telegram({ url }: { url?: string }) {
         }
 
         await ctx.replyWithHTML(
-          `🌟 <b>Selamat Datang di Toko Crypto Ecer Ridwan</b> 🌟\n\n` +
+          `🌟 <b>Bakul Ecer Crypto</b> 🌟\n\n` +
             `Kami hadir untuk mempermudah Anda dalam melakukan top-up <b>crypto eceran</b> dengan berbagai pilihan koin populer:\n\n` +
-            `🔹 <b>Solana (SOL)</b> \n- Stok: <b>${balanceSolana} $SOL</b>\n\n` +
-            `🔹 <b>Ethereum (ETH)</b> \n- Stock : <b>Belum Tersedia</b>\n\n` +
-            `🔹 <b>USDT (Tether)</b> \n- Stock : <b>Belum Tersedia</b>\n\n` +
-            `🔹 <b>BNB (Binance Coin)</b> \n- Stock : <b>Belum Tersedia</b>\n\n` +
+            `- <b>Solana $${priceSol} / $SOL</b> \n- Stok: <b>${balanceSolana}\n- IDR: Rp${totalIDRSOL.toLocaleString(
+              "id-ID"
+            )}</b>\n\n` +
+            `- <b>BNB $${priceBNB} / $BNB</b> \n- Stock : <b>${balanceBnb}\n- IDR: Rp${totalIDRBNB.toLocaleString(
+              "id-ID"
+            )}</b>\n\n` +
+            `- <b>Polygon $${priceMATIC} / $MATIC</b> \n- Stock : <b>${balanceMatic}\n- IDR: Rp${totalIDRMATIC.toLocaleString(
+              "id-ID"
+            )}</b>\n\n` +
             `💵 <b>Pilihan Metode Pembayaran:</b>\n` +
             `✔️ QRIS\n` +
             `✔️ Transfer Bank\n` +
@@ -57,19 +73,11 @@ export async function telegram({ url }: { url?: string }) {
             `🛒 <b>Silakan beli koin pilihan Anda dari menu di bawah ini:</b>\n\n` +
             `✨ <i>Terima kasih atas kepercayaan Anda, semoga transaksi Anda berjalan lancar!</i> ✨`,
           Markup.inlineKeyboard([
-            [
-              Markup.button.callback("💰 Beli Solana (SOL)", "solana"),
-              Markup.button.callback("📞 Hubungi Admin", "dev"),
-            ],
+            [Markup.button.callback("💰 Beli Solana (SOL)", "solana")],
+            [Markup.button.callback("💰 Beli BNB (BNB)", "bnb")],
+            [Markup.button.callback("💰 Beli Polygon (MATIC)", "matic")],
+            [Markup.button.callback("📞 Hubungi Admin", "dev")],
           ])
-
-          // Markup.inlineKeyboard([
-          //   [
-          //     Markup.button.callback("Cek Saldo Wallet Penampung", "saldo"),
-          //     Markup.button.callback("Solana (SOL)", "solana"),
-          //   ],
-          //   [Markup.button.callback("Hub Admin", "dev")],
-          // ])
         );
       } catch (error) {
         console.error("Error in bot.start:", error);
@@ -87,12 +95,14 @@ export async function telegram({ url }: { url?: string }) {
     });
 
     bot.action("solana", async (ctx) => {
-      const price = await getPriceSol();
+      const price = Number(await getPriceSol());
       if (price) {
-        solPriceUSD = parseFloat(price);
+        solPriceUSD = parseFloat(price as any);
         await ctx.replyWithHTML(
           `📢 <b>Top-Up Solana (SOL)</b>\n\n` +
-            `Harga Solana saat ini adalah <b>$${price}</b>\n\n` +
+            `Harga Solana saat ini adalah <b>$${price} = Rp${Number(
+              price * rateUSDToIDR.IDR
+            ).toLocaleString("id-ID")}</b>\n\n` +
             `Silakan ketik jumlah SOL yang ingin Anda beli (contoh: <b>2.5</b> SOL).`
         );
         const userId = ctx.from?.id;
@@ -130,7 +140,7 @@ export async function telegram({ url }: { url?: string }) {
           );
           return;
         }
-        const rateUSDToIDR = await getCyreency();
+
         const totalPriceIDR = Math.ceil(
           amountSOL * solPriceUSD * rateUSDToIDR.IDR
         );

@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import midtransRoutes from "./routes/midtransRoutes";
 import { telegram } from "./core/telegram/telegramConnect";
-import { getPriceSol } from "./core/api/solanaPrice";
+import { getPriceSol } from "./core/api/coinPrice";
 import { checkSolBalance,sendSol } from "./core/coin/solana";
 import { connectDB } from "./connection/conenction";
 
