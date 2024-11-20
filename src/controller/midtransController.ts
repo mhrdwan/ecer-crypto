@@ -40,7 +40,7 @@ export const midtransCreate = async ({
   });
   await newOrder.save();
   console.log(`ini total`, total);
-  const grossAmount = Math.round(total * PPN);
+  const grossAmount = Math.max(Math.ceil(total * PPN), 10);
   const transactionDetails = {
     order_id: invoice,
     gross_amount: grossAmount,
