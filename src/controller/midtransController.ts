@@ -2,7 +2,6 @@ import { sendSol } from "../core/coin/solana";
 import { createTransaction } from "../core/midtrans/createTransaction";
 import { sendTelegramMessage } from "../core/telegram/telegramFunction";
 import Order from "../models/Order";
-const PPN = 0.007
 export const midtransCreate = async ({
   total,
   cusName,
@@ -40,15 +39,15 @@ export const midtransCreate = async ({
   });
   await newOrder.save();
   console.log(`ini total`, total);
-  const grossAmount = Math.max(Math.ceil(total * PPN), 10);
+  const PPN = Math.round(total * 0.007);
   const transactionDetails = {
     order_id: invoice,
-    gross_amount: grossAmount,
+    gross_amount: PPN,
   };
   const itemDetails = [
     {
       id: coin,
-      price: grossAmount,
+      price: PPN,
       quantity: 1,
       name: coin,
     },
