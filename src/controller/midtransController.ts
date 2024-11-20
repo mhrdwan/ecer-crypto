@@ -81,7 +81,7 @@ export const midtransCreate = async ({
 💵 Jumlah: Rp ${Math.round(total * (1 + PPN)).toLocaleString("id-ID")}
 💳 Pembayaran untuk: ${coin.toUpperCase()}
 
-✅ Silakan lakukan pembayaran melalui link berikut:
+✅ Masa Berlaku Pembayaran Adalah 2 MENIT Silakan lakukan pembayaran melalui link berikut:
 🌐 ${paymentUrl}
 
 📌 Harap segera menyelesaikan pembayaran sebelum masa berlaku berakhir.
