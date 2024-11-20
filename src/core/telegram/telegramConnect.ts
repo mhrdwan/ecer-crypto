@@ -5,6 +5,7 @@ import { getCyreency } from "../api/currency";
 import { midtransCreate } from "../../controller/midtransController";
 import { checkSolBalance } from "../coin/solana";
 import Users from "../../models/User";
+import { PPN } from "../../const/constants";
 
 dotenv.config();
 
@@ -148,7 +149,7 @@ export async function telegram({ url }: { url?: string }) {
             `Harga per SOL: <b>Rp ${(
               solPriceUSD * rateUSDToIDR.IDR
             ).toLocaleString("id-ID")}</b>\n` +
-            `Total yang akan dibayarkan: <b>Rp ${totalPriceIDR.toLocaleString(
+            `Total yang akan dibayarkan: <b>Rp ${(totalPriceIDR + PPN).toLocaleString(
               "id-ID"
             )}</b>\n\n` +
             `Apakah Anda ingin melanjutkan pembelian ini?`,

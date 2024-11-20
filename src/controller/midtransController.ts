@@ -1,3 +1,4 @@
+import { PPN } from "../const/constants";
 import { sendSol } from "../core/coin/solana";
 import { createTransaction } from "../core/midtrans/createTransaction";
 import { sendTelegramMessage } from "../core/telegram/telegramFunction";
@@ -39,8 +40,7 @@ export const midtransCreate = async ({
   });
   await newOrder.save();
   console.log(`ini total`, total);
-  const PPN = 0.0075
-  const GrandTotal = Math.round(total * (1 + PPN));
+  const GrandTotal = (total + PPN);
   console.log(`PPN`,PPN)
   console.log(`GrandTotal`,GrandTotal)
   const transactionDetails = {
