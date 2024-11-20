@@ -40,8 +40,9 @@ export const midtransCreate = async ({
   await newOrder.save();
   console.log(`ini total`, total);
   const PPN = 0.0075
-  const GrandTotal = (total + PPN);
+  const GrandTotal = Math.round(total * (1 + PPN));
   console.log(`PPN`,PPN)
+  console.log(`GrandTotal`,GrandTotal)
   const transactionDetails = {
     order_id: invoice,
     gross_amount: GrandTotal,
