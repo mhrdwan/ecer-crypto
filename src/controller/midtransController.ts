@@ -40,9 +40,9 @@ export const midtransCreate = async ({
   });
   await newOrder.save();
   console.log(`ini total`, total);
-  const GrandTotal =  Math.round(total * (1 + PPN));
-  console.log(`PPN`,PPN)
-  console.log(`GrandTotal`,GrandTotal)
+  const GrandTotal = Math.round(total * (1 + PPN));
+  console.log(`PPN`, PPN);
+  console.log(`GrandTotal`, GrandTotal);
   const transactionDetails = {
     order_id: invoice,
     gross_amount: GrandTotal,
@@ -78,7 +78,7 @@ export const midtransCreate = async ({
 
 🛒 Order ID: ${transactionDetails.order_id}
 😎 Pembeli : ${cusName},
-💵 Jumlah: Rp ${total.toLocaleString("id-ID")}
+💵 Jumlah: Rp ${Math.round(total * (1 + PPN)).toLocaleString("id-ID")}
 💳 Pembayaran untuk: ${coin.toUpperCase()}
 
 ✅ Silakan lakukan pembayaran melalui link berikut:
