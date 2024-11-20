@@ -14,7 +14,10 @@ export async function createTransaction(
     transaction_details: transactionDetails,
     item_details: itemDetails,
     customer_details: customerDetails,
-   
+    expiry: {
+      unit: "minutes", 
+      duration: 2,   
+    },
   };
 
   try {
