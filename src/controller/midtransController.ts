@@ -176,9 +176,9 @@ export const handleMidtransNotification = async (req: any, res: any) => {
 💵 Jumlah Token: ${findID.jumlahToken} ${findID.token}
 ⏰ Waktu Transaksi: ${new Date(transaction_time).toLocaleString()}
 
-Lihat detail transaksi Anda: \nhttps://solscan.io/tx/${
+Lihat detail transaksi Anda: \nhttps://explorer.solana.com/tx/${
               sendBalance.signature
-            }?cluster=devnet
+            }
         `,
           });
         } catch (error) {
