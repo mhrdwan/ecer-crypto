@@ -24,8 +24,9 @@ let solPriceUSD: number = 0;
 
 export async function telegram({ url }: { url?: string }) {
   try {
-    const balanceSolana = await checkSolBalance();
+    
     bot.start(async (ctx) => {
+      const balanceSolana = await checkSolBalance();
       try {
         const telegramId = ctx.from.id;
         const name = ctx.from.first_name || "User";
@@ -77,6 +78,7 @@ export async function telegram({ url }: { url?: string }) {
     });
 
     bot.action("saldo", async (ctx) => {
+      const balanceSolana = await checkSolBalance();
       await ctx.replyWithHTML(
         `💰 <b>Saldo Wallet Penampung</b>\n\n` +
           `📍 Saldo saat ini: <b>${balanceSolana} $SOL </b>\n` +
@@ -108,6 +110,7 @@ export async function telegram({ url }: { url?: string }) {
     });
 
     bot.on("text", async (ctx) => {
+      const balanceSolana = await checkSolBalance();
       const userId = ctx.from?.id;
       if (!userId) return;
 
