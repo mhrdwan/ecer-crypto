@@ -25,7 +25,6 @@ let solPriceUSD: number = 0;
 
 export async function telegram({ url }: { url?: string }) {
   try {
-    
     bot.start(async (ctx) => {
       const balanceSolana = await checkSolBalance();
       try {
@@ -149,9 +148,9 @@ export async function telegram({ url }: { url?: string }) {
             `Harga per SOL: <b>Rp ${(
               solPriceUSD * rateUSDToIDR.IDR
             ).toLocaleString("id-ID")}</b>\n` +
-            `Total yang akan dibayarkan: <b>Rp ${(totalPriceIDR + PPN).toLocaleString(
-              "id-ID"
-            )}</b>\n\n` +
+            `Total yang akan dibayarkan: <b>Rp ${Math.round(
+              totalPriceIDR * (1 + PPN)
+            ).toLocaleString("id-ID")}</b>\n\n` +
             `Apakah Anda ingin melanjutkan pembelian ini?`,
           Markup.inlineKeyboard([
             [
